@@ -1,0 +1,179 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Furre Alfread Portfolio Design System - Dark Theme with Neon Gradients */
+
+@layer base {
+  :root {
+    /* Dark Theme Base Colors */
+    --background: 222 47% 4%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 6%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 6%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Neon Gradient System */
+    --primary: 267 100% 70%;
+    --primary-foreground: 222 47% 4%;
+    
+    --secondary: 222 47% 8%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 222 47% 10%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 193 100% 70%;
+    --accent-foreground: 222 47% 4%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 222 47% 12%;
+    --input: 222 47% 8%;
+    --ring: 267 100% 70%;
+
+    --radius: 1rem;
+    
+    /* Custom Portfolio Colors */
+    --neon-purple: 267 100% 70%;
+    --neon-cyan: 193 100% 70%;
+    --neon-pink: 328 100% 70%;
+    --neon-orange: 25 100% 65%;
+    --dark-surface: 222 47% 6%;
+    --darker-surface: 222 47% 4%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--neon-purple)), hsl(var(--neon-cyan)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--neon-pink)), hsl(var(--neon-orange)));
+    --gradient-text: linear-gradient(135deg, hsl(var(--neon-purple)), hsl(var(--neon-cyan)));
+    --gradient-border: linear-gradient(135deg, hsl(var(--neon-purple) / 0.5), hsl(var(--neon-cyan) / 0.5));
+    
+    /* Shadows and Effects */
+    --shadow-neon: 0 0 20px hsl(var(--neon-purple) / 0.3);
+    --shadow-neon-strong: 0 0 40px hsl(var(--neon-purple) / 0.5);
+    --shadow-card: 0 8px 32px hsl(222 47% 4% / 0.8);
+    
+    /* Typography Scale */
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    
+    /* Animation */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  /* Dark mode is default - light mode variations if needed */
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 4%;
+    /* Add light mode overrides if needed */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    font-family: var(--font-body);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+}
+
+@layer components {
+  /* Gradient Text Effect */
+  .gradient-text {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Neon Border Effect */
+  .neon-border {
+    border: 1px solid transparent;
+    background: var(--gradient-border) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: subtract;
+    mask-composite: subtract;
+  }
+  
+  /* Glass Effect */
+  .glass {
+    background: hsl(var(--dark-surface) / 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid hsl(var(--border) / 0.2);
+  }
+  
+  /* Smooth scroll */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--gradient-primary);
+    border-radius: 3px;
+  }
+  
+  /* Hover effects */
+  .hover-glow {
+    transition: var(--transition-smooth);
+  }
+  
+  .hover-glow:hover {
+    box-shadow: var(--shadow-neon);
+  }
+  
+  /* Animation utilities */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  .animate-pulse-neon {
+    animation: pulse-neon 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  @keyframes pulse-neon {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+}
