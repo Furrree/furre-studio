@@ -2,6 +2,12 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
+console.log("ENV DEBUG:", {
+  RESEND_API_KEY: process.env.RESEND_API_KEY,
+  MAIL_FROM: process.env.MAIL_FROM,
+  MAIL_TO: process.env.MAIL_TO,
+});
+
 export async function POST(req: Request) {
   const body = await req.json();
   const { name, email, subject, message } = body;
