@@ -29,7 +29,7 @@ const onSubmit = async (data: ContactForm) => {
     const res = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data), // ✅ already clean from react-hook-form
     });
 
     if (!res.ok) throw new Error("Failed to send message");
