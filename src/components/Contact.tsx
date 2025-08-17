@@ -22,31 +22,31 @@ export const Contact = () => {
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<ContactForm>();
 
-  // 🔑 Dynamic API URL (local or deployed)
-  const apiBaseUrl = import.meta.env.VITE_API_URL || "";
+// In your onSubmit function:
+const onSubmit = async (data: ContactForm) => {
+  setIsSubmitting(true);
 
-  const onSubmit = async (data: ContactForm) => {
-    setIsSubmitting(true);
+  try {
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
 
-    try {
-      const res = await fetch("https://your-vercel-app-url.vercel.app/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+    if (!res.ok) throw new Error("Failed to send message");
 
-      if (!res.ok) throw new Error("Failed to send message");
+    setIsSubmitted(true);
+    toast.success("Message sent successfully!");
+    reset();
+  } catch (err) {
+    console.error("Error:", err);
+    toast.error("Failed to send message. Please try again later.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
-      setIsSubmitted(true);
-      toast.success("Message sent successfully!");
-      reset();
-    } catch (err) {
-      console.error("Error:", err);
-      toast.error("Failed to send message. Please try again later.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+
 
   return (
     <section id="contact" className="py-24 bg-darker-surface relative overflow-hidden">
