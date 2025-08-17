@@ -22,7 +22,6 @@ export const Contact = () => {
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<ContactForm>();
 
-// In your onSubmit function:
 const onSubmit = async (data: ContactForm) => {
   setIsSubmitting(true);
 
@@ -30,14 +29,14 @@ const onSubmit = async (data: ContactForm) => {
     const res = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data), // ✅ already clean from react-hook-form
     });
 
     if (!res.ok) throw new Error("Failed to send message");
 
     setIsSubmitted(true);
     toast.success("Message sent successfully!");
-    reset();
+    reset(); // clear form
   } catch (err) {
     console.error("Error:", err);
     toast.error("Failed to send message. Please try again later.");
