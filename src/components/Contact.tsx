@@ -19,31 +19,41 @@ interface ContactForm {
 export const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
+
   const { register, handleSubmit, formState: { errors }, reset } = useForm<ContactForm>();
 
   const onSubmit = async (data: ContactForm) => {
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    console.log("Form submitted:", data);
-    toast.success("Message sent successfully! I'll get back to you soon.");
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    reset();
-    
-    // Reset success state after 3 seconds
-    setTimeout(() => setIsSubmitted(false), 3000);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        toast.success("Message sent successfully! I'll get back to you soon.");
+        setIsSubmitted(true);
+        reset();
+
+        setTimeout(() => setIsSubmitted(false), 3000);
+      } else {
+        toast.error("Failed to send message. Please try again later.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong. Try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <section id="contact" className="py-24 bg-darker-surface relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-neon-purple/5 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2" />
-      
+
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
