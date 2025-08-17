@@ -22,30 +22,31 @@ export const Contact = () => {
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<ContactForm>();
 
-const onSubmit = async (data: ContactForm) => {
-  setIsSubmitting(true);
+  // 🔑 Dynamic API URL (local or deployed)
+  const apiBaseUrl = import.meta.env.VITE_API_URL || "";
 
-  try {
-    const res = await fetch("http://localhost:5000/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data), // ✅ already clean from react-hook-form
-    });
+  const onSubmit = async (data: ContactForm) => {
+    setIsSubmitting(true);
 
-    if (!res.ok) throw new Error("Failed to send message");
+    try {
+      const res = await fetch(`${apiBaseUrl}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-    setIsSubmitted(true);
-    toast.success("Message sent successfully!");
-    reset(); // clear form
-  } catch (err) {
-    console.error("Error:", err);
-    toast.error("Failed to send message. Please try again later.");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+      if (!res.ok) throw new Error("Failed to send message");
 
-
+      setIsSubmitted(true);
+      toast.success("Message sent successfully!");
+      reset();
+    } catch (err) {
+      console.error("Error:", err);
+      toast.error("Failed to send message. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section id="contact" className="py-24 bg-darker-surface relative overflow-hidden">
