@@ -22,32 +22,30 @@ export const Contact = () => {
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<ContactForm>();
 
-  const onSubmit = async (data: ContactForm) => {
-    setIsSubmitting(true);
+const onSubmit = async (data: ContactForm) => {
+  setIsSubmitting(true);
 
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, subject, message }),
-      });
+  try {
+    const res = await fetch("http://localhost:5000/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data), // ✅ already clean from react-hook-form
+    });
 
-      if (response.ok) {
-        toast.success("Message sent successfully! I'll get back to you soon.");
-        setIsSubmitted(true);
-        reset();
+    if (!res.ok) throw new Error("Failed to send message");
 
-        setTimeout(() => setIsSubmitted(false), 3000);
-      } else {
-        toast.error("Failed to send message. Please try again later.");
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Something went wrong. Try again later.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    setIsSubmitted(true);
+    toast.success("Message sent successfully!");
+    reset(); // clear form
+  } catch (err) {
+    console.error("Error:", err);
+    toast.error("Failed to send message. Please try again later.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+
 
   return (
     <section id="contact" className="py-24 bg-darker-surface relative overflow-hidden">
