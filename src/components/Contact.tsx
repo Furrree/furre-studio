@@ -26,7 +26,6 @@ const onSubmit = async (data: ContactForm) => {
   setIsSubmitting(true);
 
   try {
-    // Build FormData for Web3Forms
     const formData = new FormData();
     formData.append("access_key", import.meta.env.VITE_WEB3FORMS_KEY || "");
     formData.append("from_name", "Furre Studio Website");
@@ -34,24 +33,22 @@ const onSubmit = async (data: ContactForm) => {
     formData.append("name", data.name);
     formData.append("email", data.email);
     formData.append("message", data.message);
-    // optional honeypot
     formData.append("botcheck", "");
 
-    const res = await fetch("/api/contact", {
+    const res = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: formData
     });
 
     const json = await res.json();
 
-    if (!json.success) {
+    if (json.success) {
+      setIsSubmitted(true);
+      toast.success("Message sent successfully!");
+      reset();
+    } else {
       throw new Error(json.message || "Failed to send message");
     }
-
-    setIsSubmitted(true);
-    toast.success("Message sent successfully!");
-    reset();
   } catch (err) {
     console.error("Error:", err);
     toast.error("Failed to send message. Please try again later.");
@@ -59,6 +56,7 @@ const onSubmit = async (data: ContactForm) => {
     setIsSubmitting(false);
   }
 };
+
 
 
 
