@@ -22,7 +22,7 @@ module.exports = async function handler(req, res) {
     });
 
     const result = await resend.emails.send({
-      from: process.env.MAIL_FROM || "onboarding@resend.dev",
+      from: "onboarding@resend.dev", // free plan only works with this
       to: process.env.MAIL_TO || "your@email.com",
       subject: `${name}: ${subject || "No Subject"}`,
       text: `New message from ${name} (${email}):\n\n${message}`,
