@@ -26,46 +26,28 @@ const onSubmit = async (data: ContactForm) => {
   setIsSubmitting(true);
 
   try {
+    // Build FormData for Web3Forms
     const formData = new FormData();
     formData.append("access_key", import.meta.env.VITE_WEB3FORMS_KEY || "");
-    formData.append("from_name", "✨ Furre Studio");
-    formData.append("subject", `📩 New Lead — ${data.name}`);
+    formData.append("from_name", "Furre Studio Website");
+    formData.append("subject", data.subject || "Contact Form");
+    formData.append("name", data.name);
+    formData.append("email", data.email);
+    formData.append("message", data.message);
+    // optional honeypot
+    formData.append("botcheck", "");
 
-    // 👉 Use html_code instead of message
-    const htmlTemplate = `
-      <div style="max-width:600px;margin:auto;padding:20px;font-family:Arial,Helvetica,sans-serif;background:#f9fafb;border-radius:12px;border:1px solid #e5e7eb;">
-        
-        <h2 style="color:#111827;text-align:center;">📩 New Lead</h2>
-        <p style="text-align:center;color:#6b7280;">You just received a new inquiry from your website 🚀</p>
-
-        <div style="background:white;padding:16px;border-radius:10px;margin-top:20px;border:1px solid #e5e7eb;">
-          <p><strong style="color:#111827;">👤 Name:</strong> ${data.name}</p>
-          <p><strong style="color:#111827;">📧 Email:</strong> <a href="mailto:${data.email}" style="color:#2563eb;text-decoration:none;">${data.email}</a></p>
-          <p><strong style="color:#111827;">📝 Subject:</strong> ${data.subject}</p>
-          <p><strong style="color:#111827;">💬 Message:</strong><br/><span style="color:#374151;">${data.message.replace(/\n/g, "<br/>")}</span></p>
-        </div>
-
-        <div style="margin-top:20px;font-size:14px;color:#6b7280;text-align:center;">
-          <p>⏰ Submitted: ${new Date().toLocaleString()}</p>
-          <p>🌐 Source: <a href="https://furrestudio.com" style="color:#2563eb;">furrestudio.com</a></p>
-        </div>
-
-        <div style="margin-top:30px;text-align:center;">
-          <p style="font-weight:bold;color:#7c3aed;font-size:16px;">✨ Furre Studio</p>
-        </div>
-      </div>
-    `;
-
-    formData.append("html_code", htmlTemplate); // 🔥 replaces "message"
-    formData.append("replyto", data.email);
-
-    const res = await fetch("https://api.web3forms.com/submit", {
+    const res = await fetch("/api/contact", {
       method: "POST",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     });
 
     const json = await res.json();
-    if (!json.success) throw new Error(json.message || "Failed to send message");
+
+    if (!json.success) {
+      throw new Error(json.message || "Failed to send message");
+    }
 
     setIsSubmitted(true);
     toast.success("Message sent successfully!");
@@ -77,6 +59,9 @@ const onSubmit = async (data: ContactForm) => {
     setIsSubmitting(false);
   }
 };
+
+
+
 
   return (
     <section id="contact" className="py-24 bg-darker-surface relative overflow-hidden">
