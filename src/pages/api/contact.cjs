@@ -15,6 +15,12 @@ module.exports = async function handler(req, res) {
   }
 
   try {
+    console.log("DEBUG: Sending email with", {
+      from: process.env.MAIL_FROM,
+      to: process.env.MAIL_TO,
+      apiKey: !!process.env.RESEND_API_KEY,
+    });
+
     const result = await resend.emails.send({
       from: process.env.MAIL_FROM || "onboarding@resend.dev",
       to: process.env.MAIL_TO || "your@email.com",
@@ -22,9 +28,11 @@ module.exports = async function handler(req, res) {
       text: `New message from ${name} (${email}):\n\n${message}`,
     });
 
+    console.log("DEBUG: Resend API response", result);
+
     return res.status(200).json({ success: true, result });
   } catch (err) {
-    console.error("Email send failed:", err);
-    return res.status(500).json({ error: "Failed to send email" });
+    console.error("EMAIL ERROR >>>", err);
+    return res.status(500).json({ error: "Failed to send email", details: err.message });
   }
 };
