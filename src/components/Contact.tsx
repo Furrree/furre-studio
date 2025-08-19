@@ -31,7 +31,8 @@ const onSubmit = async (data: ContactForm) => {
     formData.append("from_name", "✨ Furre Studio");
     formData.append("subject", `📩 New Lead — ${data.name}`);
 
-    const htmlMessage = `
+    // 👉 Use html_code instead of message
+    const htmlTemplate = `
       <div style="max-width:600px;margin:auto;padding:20px;font-family:Arial,Helvetica,sans-serif;background:#f9fafb;border-radius:12px;border:1px solid #e5e7eb;">
         
         <h2 style="color:#111827;text-align:center;">📩 New Lead</h2>
@@ -55,7 +56,7 @@ const onSubmit = async (data: ContactForm) => {
       </div>
     `;
 
-    formData.append("message", htmlMessage);
+    formData.append("html_code", htmlTemplate); // 🔥 replaces "message"
     formData.append("replyto", data.email);
 
     const res = await fetch("https://api.web3forms.com/submit", {
@@ -64,7 +65,6 @@ const onSubmit = async (data: ContactForm) => {
     });
 
     const json = await res.json();
-
     if (!json.success) throw new Error(json.message || "Failed to send message");
 
     setIsSubmitted(true);
